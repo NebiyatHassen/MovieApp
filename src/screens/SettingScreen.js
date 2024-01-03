@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { View, Text, Switch, StyleSheet, TouchableOpacity,Image} from 'react-native';
+import { View, Text, Switch, StyleSheet, TouchableOpacity,Image,Button} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from @expo/vector-icons
 import { getAuth, signOut,sendPasswordResetEmail,updateProfile} from 'firebase/auth';
 import Modal from 'react-native-modal';
@@ -13,6 +13,7 @@ const SettingScreen = ({navigation}) => {
   const [notificationSwitch, setNotificationSwitch] = useState(true);
   const [isModalVisible,setModalVisible]=useState(false);
   const [about,setabout] = useState(false);
+  const[logoutmodalvisible,setLogoutModal] = useState(false);
   const handleThemeToggle = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
@@ -94,6 +95,7 @@ const handleabout =()=>{
     } catch (error) {
       console.error('Logout Error:', error.message);
     }
+    setLogoutModal(false)
   };
  
   const handleChangePassword =  () => { 
@@ -103,9 +105,9 @@ const handleabout =()=>{
 
   };
   return (
-    <View style={[styles.container, { backgroundColor: theme === 'light' ? '#fff' : '#333' }]}>
+    <View style={[styles.container, { backgroundColor: theme === 'light' ? '#fff' : '#000' }]}>
     
-    <Text style ={styles.head}>Setting</Text>
+    <Text style ={styles.head}>SETTING</Text>
 
     <View style={styles.containerr}>
       <TouchableOpacity onPress={pickImage} style={styles.imagePickerContainer}>
@@ -123,47 +125,72 @@ const handleabout =()=>{
       </TouchableOpacity>
 
     </View>
-      <Text style={styles.header}>User Preferences</Text>
+      <Text style={styles.header}>PREFERENCES</Text>
 
       
       <TouchableOpacity style={styles.settingItem} >
-        <Text>Language</Text>
-        <Ionicons name="language-outline" size={24} color="#3498db" />
+      <Ionicons name="language-outline" size={24} color="#fff" style={{ borderRadius: 20,
+    backgroundColor: "#2D3250",
+    padding: 3, }} />
+        <Text style={{ marginRight:180 }}>Language</Text>
+        <Text>English</Text>
+     
       </TouchableOpacity>
       
       <View style={styles.settingItem}>
-        <Text>Dark Theme</Text>
+      <Ionicons name="moon-outline" size={24} color="#fff" style={{ borderRadius: 20,
+    backgroundColor: "#2D3250",
+    padding: 3, }}/>
+        <Text style={{ marginRight:180}}>Dark Theme</Text>
+      
         <Switch value={theme === 'dark'} onValueChange={handleThemeToggle} />
       </View>
 
 
       <View style={styles.settingItem}>
-        <Text>Enable Notifications</Text>
+      <Ionicons name="notifications-outline" size={24} color="#fff" style={{ borderRadius: 20,
+    backgroundColor:"#2D3250",
+    padding: 3, }}/>
+        <Text style={{ marginRight:130}}>Enable Notifications</Text>
+
         <Switch value={notificationSwitch} onValueChange={handleNotificationToggle} />
       </View>
-      <Text style={styles.header}>Security</Text>
+      <Text style={styles.header}>SECURITY</Text>
 
 
 <TouchableOpacity style={styles.settingItem} onPress={handleChangePassword}>
-  <Text>Change Password</Text>
+<Ionicons name="lock-closed-outline" size={24} color="#fff" style={{ borderRadius: 20,
+    backgroundColor: "#2D3250",
+    padding: 3, }}/>
+  <Text style={{ marginRight:200 }}>Change Password</Text>
 </TouchableOpacity>
   
       
-<Text style={styles.header}>Additional Sections</Text>
+<Text style={styles.header}>ADDITIONAL SECTIONS</Text>
 
 
       <TouchableOpacity style={styles.settingItem} onPress={handleNotification} >
-        <Text>Help</Text>
+      <Ionicons name="help-circle-outline" size={24} color="#fff" style={{ borderRadius: 20,
+    backgroundColor: "#2D3250",
+    padding: 3, }} />
+        <Text style={{ marginRight:280}}>Help</Text>
       </TouchableOpacity>
 
       
       <TouchableOpacity style={styles.settingItem} onPress={handleabout}>
-        <Text>About us</Text>
+      <Ionicons name="information-circle-outline" size={24} color="#fff" style={{ borderRadius: 20,
+    backgroundColor: "#2D3250",
+    padding: 3, }}/>
+        <Text  style={{ marginRight:255}} >About us</Text>
       </TouchableOpacity>
 
       
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} >
-        <Text style={styles.logoutButtonText}>Logout</Text>
+      <TouchableOpacity style={styles.logoutButton} onPress={() => setLogoutModal(true)} >
+      <Ionicons name="log-out-outline" size={24} color="#fff" style={{ borderRadius: 20,
+    backgroundColor: "#2D3250",
+    padding: 3,
+   }}/>
+        <Text style={styles.logoutButtonText} >Logout</Text>
       </TouchableOpacity>
 
 
@@ -192,7 +219,7 @@ const handleabout =()=>{
 
       
       <TouchableOpacity onPress={toggleModal} style={{ marginTop: 20 }}>
-        <Text style={{ color: 'blue' }}>Close</Text>
+        <Text style={{ color: '#092635' }}>Close</Text>
       </TouchableOpacity>
     </View>
   </View>
@@ -206,10 +233,26 @@ const handleabout =()=>{
 cinema Go is designed to make your movie-going journey enjoyable. Welcome to Cinema Go, where we celebrate the world of movies together!"
 </Text>
             <TouchableOpacity onPress={modal}>
-              <Text style={{ color: 'blue', marginTop: 10 }}>Close</Text>
+              <Text style={{ color: '#092635', marginTop: 10 }}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={logoutmodalvisible}
+        onRequestClose={() => setLogoutModal(false)}
+      >
+       
+          <View style={styles.modalContent}  >
+            <Text>Are you sure you want to logout?</Text>
+           
+            <Button title="Yes"  onPress={handleLogout} />
+            <Button title="No" onPress={() => setLogoutModal(false)} />
+          </View>
+     
       </Modal>
     </View>
     
@@ -232,28 +275,42 @@ const styles = StyleSheet.create({
   head: {
     fontSize: 30,
     fontWeight: 'bold',
-   marginLeft:120,
+   marginLeft:100,
    padding:14
    
   },
   settingItem: {
+    fontWeight:'bold',
+    shadowColor: '#d3d3d3 ',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
+    backgroundColor: '#d3d3d3',
   paddingBottom: 10,
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.5,
+  shadowRadius: 3.84,
+  elevation: 5,
   
   },
   logoutButton: {
-    backgroundColor: '#9A031E',
-    padding: 10,
-    borderRadius: 5,
+    fontWeight:'bold',
+    shadowColor: '#d3d3d3 ',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 20,
+    marginBottom: 15,
+    backgroundColor: '#d3d3d3',
+  paddingBottom: 10,
   },
   logoutButtonText: {
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold',
+    marginRight:260
   },
   containerr: {
     flex: 1,
@@ -271,7 +328,14 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     marginBottom: 10,
   },
-  
+
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+ 
 });
 
 export default SettingScreen;

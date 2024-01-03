@@ -94,8 +94,8 @@ export default function HomeScreen() {
   
 
   return (
-    <View className="flex-1">
-      <Image
+    <View className="flex-1 bg-black">
+      {/* <Image
         source={require("../../assets/images/Blackbg.jpg")}
         style={{
           position: "absolute",
@@ -103,7 +103,7 @@ export default function HomeScreen() {
           height: "100%",
         }}
         resizeMode="cover"
-      />
+      /> */}
       <ScrollView className="mt-16">
         <StatusBar style="light" />
 
@@ -158,7 +158,7 @@ export default function HomeScreen() {
 
             
             {topRated?.length > 0 && (
-              <TopRatedMovies genre={genre} title="Top Rated" data={topRated} />
+              <TopRatedMovies genre={genre} title="Suggested Movie" data={topRated} />
             )}
 
            

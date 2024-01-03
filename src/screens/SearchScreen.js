@@ -46,17 +46,7 @@ export default function SearchScreen() {
 
   const handleTextDebounce = useCallback(debounce(handleSearch, 400), []);
   return (
-    <View className="flex-1 relative">
-      <Image
-        source={require("../../assets/images/Blackbg.jpg")}
-        style={{
-          width: width,
-          height: height,
-        }}
-        className="absolute"
-      />
-
-      {/* Search Input */}
+    <View className="flex-1 relative bg-black">
 
       <View className="mx-4 mb-3 mt-12 flex-row p-2 justify-between items-center bg-white rounded-lg">
         <TextInput

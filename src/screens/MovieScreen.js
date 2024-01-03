@@ -173,14 +173,14 @@ export default function MovieScreen() {
      
         <View className="z-20 w-full flex-row justify-between items-center px-4 mt-12 absolute">
           
-          <View className="bg-[#607274] p-2 rounded-full items-center justify-center">
+          <View className="bg-[#092635] p-2 rounded-full items-center justify-center">
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <ChevronLeftIcon size={30} strokeWidth={2} color="white" />
             </TouchableOpacity>
           </View>
 
          
-          <View className="bg-[#607274] p-2 rounded-full items-center justify-center">
+          <View className="bg-[#092635] p-2 rounded-full items-center justify-center">
             <TouchableOpacity onPress={toggleFavouriteAndSave}>
               <HeartIcon
                 size={30}
@@ -253,8 +253,8 @@ export default function MovieScreen() {
 
           {/* Release Year, Runtime */}
           {movie?.id ? (
-            <View className=" bg-[#607274] p-2 w-3/4 rounded-lg]">
-              <Text className="text-white font-semibold text-base text-left">
+            <View className=" bg-[white] p-2 w-3/4 rounded-lg]">
+              <Text className="text-black font-semibold text-base text-left">
                 {formatPopularity(movie?.popularity)}
                 {" * "}
                 {formatRuntime(movie?.runtime)} {}{" "}
@@ -263,13 +263,13 @@ export default function MovieScreen() {
             </View>
           ) : null}
           <TouchableOpacity onPress={handleInvite} style={{ marginTop: 20, alignSelf: 'center' }}>
-        <View style={{ backgroundColor: '#607274', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5 }}>
+        <View style={{ backgroundColor: '#092635', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5 }}>
           <Text style={{ color: 'white', fontWeight: 'bold' }}>Invite</Text>
         </View>
           
       </TouchableOpacity>
       <TouchableOpacity onPress={handleWatch} style={{ marginTop: 20, alignSelf: 'center' }}>
-        <View style={{ backgroundColor: '#607274', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5 }}>
+        <View style={{ backgroundColor: '#092635', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5 }}>
           <Text style={{ color: 'white', fontWeight: 'bold' }}>Watch Movie</Text>
         </View>
           

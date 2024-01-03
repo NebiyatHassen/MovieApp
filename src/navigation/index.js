@@ -56,8 +56,8 @@ export default function AppNavigation() {
               iconName = "home";
             } else if (route.name === "Search") {
               iconName = "search";
-            } else if (route.name === "Saved") {
-              iconName = "heart";
+            } else if (route.name === "Favorite") {
+              iconName = "star";
             } else if(route.name==="Setting"){
               iconName ="settings"
             }
@@ -82,7 +82,7 @@ export default function AppNavigation() {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
-        <Tab.Screen name="Saved" component={SavedScreen} />
+        <Tab.Screen name="Favorite" component={SavedScreen} />
         <Tab.Screen name="Setting" component={Settingscreen}/>
         
 

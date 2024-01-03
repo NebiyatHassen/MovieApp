@@ -49,8 +49,8 @@ export default function SavedScreen() {
 
   return (
     <ScrollView>
-      <View className=" relative flex-1">
-        <ImageBackground
+      <View className=" relative flex-1 bg-black" >
+        {/* <ImageBackground
           source={require("../../assets/images/homescreen.png")}
           style={{
             flex: 1,
@@ -58,15 +58,15 @@ export default function SavedScreen() {
             height: "100%",
           }}
           resizeMode="cover"
-        >
+        > */}
           <View className="mt-12 p-4">
             <View className="flex-row justify-between items-center">
               <Text className="font-bold text-xl text-white ">
-                Saved Movies
+                My Movies
               </Text>
               <TouchableOpacity
                 onPress={clearSavedMovies}
-                className="bg-[#607274] py-2 px-4 rounded-lg"
+                className="bg-[#092635] py-2 px-4 rounded-lg"
               >
                 <Text className="font-bold text-lg text-white">Clear</Text>
               </TouchableOpacity>
@@ -99,7 +99,7 @@ export default function SavedScreen() {
               ))}
             </View>
           </View>
-        </ImageBackground>
+        {/* </ImageBackground> */}
       </View>
     </ScrollView>
   );

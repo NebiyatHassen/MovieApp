@@ -6,6 +6,7 @@ import {
   TextInput,
   FlatList,
   StyleSheet,
+  
 } from "react-native";
 import { Video } from "expo-av";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,31 +15,81 @@ import { useNavigation } from "@react-navigation/native";
 import { styles } from "../constant/theme";
 import { Platform } from "react-native";
 import {movieapikey} from "../../utils/apikey"
+import { getAuth} from 'firebase/auth';
+import 'firebase/firestore'; 
+import { addDoc, collection,getDocs,serverTimestamp,query,orderBy,onSnapshot,where} from 'firebase/firestore';
+import { db} from '../../firebase';
+import { Ionicons } from '@expo/vector-icons'; 
 
 const VirtualMovieScreen = ({ route }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [movieDetails, setMovieDetails] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [videoSource, setVideoSource] = useState('');
+
   const navigation = useNavigation();
 
   const ios = Platform.OS === "ios";
   const topMargin = ios ? "" : " mt-3";
   const { movieId } = route.params;
-  
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleSendMessage = () => {
+ 
+const auth = getAuth();
+const user = auth.currentUser;
+  const handleSendMessage = async () => {
     if (newMessage.trim() !== "") {
-      setChatMessages((prevMessages) => [
-        ...prevMessages,
-        { text: newMessage, user: "User" },
-      ]);
+      const userMessage = {
+        text: newMessage,
+        user: user.email,
+        createdAt: serverTimestamp(),
+        movieId: movieId,
+      };
+  
+      await addDoc(collection(db, 'comments'), userMessage);
+
+      fetchComments();
       setNewMessage("");
     }
   };
+ 
+  
+  const fetchComments = async () => {
+    try {
+      const snapshot = await getDocs(
+        query(
+          collection(db, 'comments'),
+          where('movieId', '==', movieId),
+          orderBy('createdAt', 'desc')
+        )
+      );
+  
+      const comments = snapshot.docs.map((doc) => doc.data());
+      setChatMessages(comments);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+  
+  useEffect(() => {
+
+    fetchComments();
+  
+   
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, 'comments'),
+        where('movieId', '==', movieId),
+        orderBy('createdAt', 'desc')
+      ),
+      (snapshot) => {
+        const comments = snapshot.docs.map((doc) => doc.data());
+        setChatMessages(comments);
+      }
+    );
+  
+    return () => unsubscribe();
+  }, [movieId]); 
+
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
@@ -47,17 +98,30 @@ const VirtualMovieScreen = ({ route }) => {
         );
         const data = await response.json();
         setMovieDetails(data);
+        const videoResponse = await fetch(
+          `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${movieapikey}`
+        );
+        const videoData = await videoResponse.json();
+       
+        const videoKey = videoData.results[0]?.key;
+  
+        setVideoSource(`https://www.youtube.com/watch?v=${videoKey}`);
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
     };
+  
     fetchMovieDetails();
   }, [movieId]);
+  
+  
 
+  
   return (
+   
     <View
       contentContainerStyle={{ paddingBottom: 20 }}
-      className="flex-1 bg-neutral-900"
+      className="flex-1 bg-white"
     >
       <View>
         <SafeAreaView
@@ -73,41 +137,32 @@ const VirtualMovieScreen = ({ route }) => {
           >
             <ChevronLeftIcon size="28" strokeWidth={2.5} color="white" />
           </TouchableOpacity>
-          <View className="flex-1 justify-center">
-            <Text className="text-white text-3xl font-bold text-center">
-              <Text style={styles.text}>V</Text>irtual Room
-            </Text>
-          </View>
+          
         </SafeAreaView>
       </View>
-      {movieDetails && (
-        <>
-          <Video
-            //source={{ uri: movieDetails.streamingLink }}
-            source={{
-          uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-        }}
-            rate={1.0}
-            volume={1.0}
-            isMuted={false}
-            resizeMode="cover"
-            shouldPlay={isPlaying}
-            useNativeControls
-            style={styling.videoPlayer}
-          />
-          <TouchableOpacity
-            onPress={handlePlayPause}
-            style={styling.playPauseButton}
-          >
-            <Text>{isPlaying ? "Pause" : "Play"}</Text>
-          </TouchableOpacity>
+      {movieDetails && videoSource && (
+  <>
+    <Video
+      source={{
+        uri: videoSource,
+      }}
+      rate={1.0}
+      volume={1.0}
+      isMuted={false}
+      resizeMode="cover"
+      shouldPlay={isPlaying}
+      useNativeControls
+      style={styling.videoPlayer}
+    />
 
-          <Text style={styling.movieTitle}>{movieDetails.title}</Text>
-          <Text style={styling.movieOverview}>{movieDetails.overview}</Text>
-        </>
-      )}
+    <Text style={styling.movieTitle}>{movieDetails.title}</Text>
+    <Text style={styling.movieOverview}>{movieDetails.overview}</Text>
+  </>
+)}
+
+     
       <View style={styling.chatContainer}>
-        <Text style={styling.chatHeader}>Live Chat</Text>
+        <Text style={styling.chatHeader}>Comments</Text>
         <FlatList
           data={chatMessages}
           keyExtractor={(item, index) => index.toString()}
@@ -124,26 +179,28 @@ const VirtualMovieScreen = ({ route }) => {
       <View style={styling.inputContainer}>
         <TextInput
           style={styling.input}
-          placeholder="Type your message..."
+          placeholder="Add comment here..."
           value={newMessage}
           onChangeText={(text) => setNewMessage(text)}
         />
 
-        <TouchableOpacity
+<TouchableOpacity
           onPress={handleSendMessage}
           style={styling.sendButton}
         >
-          <Text style={styling.sendButtonText}>Send</Text>
+          <Ionicons name="send" size={24} color="black" />
         </TouchableOpacity>
       </View>
     </View>
+   
   );
+ 
 };
 
 const styling = StyleSheet.create({
   videoPlayer: {
     width: "100%",
-    height: 350,
+    height: 280,
     marginBottom: 10,
   },
   playPauseButton: {
@@ -154,45 +211,48 @@ const styling = StyleSheet.create({
     alignItems: "center",
   },
   movieTitle: {
-    color: "white",
+    color: "black",
     marginBottom: 10,
     marginLeft: 10,
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 13,
   },
   movieOverview: {
-    color: "#FFFFFF",
+    color: "black",
     marginLeft: 10,
+    fontSize: 13,
   },
   chatContainer: {
     marginTop: 20,
     flex: 1,
   },
   chatHeader: {
-    fontSize: 24,
+    fontSize: 18,
     marginBottom: 10,
-    color: "white",
+    color: "black",
     marginLeft: 10,
+    fontWeight:'bold'
   },
   messageContainer: {
     marginBottom: 10,
+    fontSize:13
   },
   messageText: {
     fontSize: 16,
-    color: "#FFFFFF",
+    color: "black",
     marginLeft: 20,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
-    marginBottom:15
+    marginBottom:20
   },
   input: {
     flex: 1,
     height: 40,
-    borderColor: "gray",
-    color: "#FFFFFF",
+    borderColor: "black",
+    color: "black",
     paddingLeft: 5,
     justifyContent: "center",
     borderWidth: 1,
@@ -201,7 +261,7 @@ const styling = StyleSheet.create({
   },
   sendButton: {
     padding: 10,
-    backgroundColor: "#607274",
+    backgroundColor: "white",
     borderRadius: 5,
     alignItems: "center",
   },
