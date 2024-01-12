@@ -23,6 +23,7 @@ import Cast from "../components/Cast";
 import PopularMovie from "../components/PopularMovie";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
+import { getAuth} from 'firebase/auth';
 
 var { width, height } = Dimensions.get("window");
 
@@ -87,65 +88,57 @@ export default function MovieScreen() {
 
   const toggleFavouriteAndSave = async () => {
     try {
-     
-      const savedMovies = await AsyncStorage.getItem("savedMovies");
+      const auth = getAuth();
+      const user = auth.currentUser;
+  
+      const savedMoviesKey = `savedMovies_${user.uid}`;
+      const savedMovies = await AsyncStorage.getItem(savedMoviesKey);
       let savedMoviesArray = savedMovies ? JSON.parse(savedMovies) : [];
-      console.log("Check if the movie is already saved");
-
-   
+      
       const isMovieSaved = savedMoviesArray.some(
         (savedMovie) => savedMovie.id === item.id
       );
-
-      console.log("Check if the movie is already in the saved list");
-
+  
       if (!isMovieSaved) {
-    
         savedMoviesArray.push(movie);
-        await AsyncStorage.setItem(
-          "savedMovies",
-          JSON.stringify(savedMoviesArray)
-        );
-        toggleFavourite(true);
-        console.log("Movie is added to the list of saved movies");
       } else {
-        // If movie is already saved, remove it from the list
-        const updatedSavedMoviesArray = savedMoviesArray.filter(
+        savedMoviesArray = savedMoviesArray.filter(
           (savedMovie) => savedMovie.id !== item.id
         );
-        await AsyncStorage.setItem(
-          "savedMovies",
-          JSON.stringify(updatedSavedMoviesArray)
-        );
-        toggleFavourite(false);
-        console.log("Movie is removed from the list of saved movies");
       }
+  
+      await AsyncStorage.setItem(savedMoviesKey, JSON.stringify(savedMoviesArray));
+      toggleFavourite(!isMovieSaved);
+      console.log("Movie is added/removed to/from the list of saved movies");
     } catch (error) {
       console.log("Error Saving Movie", error);
     }
   };
-
+  
   useEffect(() => {
-    
     const loadSavedMovies = async () => {
       try {
-        const savedMovies = await AsyncStorage.getItem("savedMovies");
+        const auth = getAuth();
+        const user = auth.currentUser;
+  
+        const savedMoviesKey = `savedMovies_${user.uid}`;
+        const savedMovies = await AsyncStorage.getItem(savedMoviesKey);
         const savedMoviesArray = savedMovies ? JSON.parse(savedMovies) : [];
-
-        
+  
         const isMovieSaved = savedMoviesArray.some(
           (savedMovie) => savedMovie.id === item.id
         );
-
+  
         toggleFavourite(isMovieSaved);
         console.log("Check if the current movie is in the saved list");
       } catch (error) {
         console.log("Error Loading Saved Movies", error);
       }
     };
-
+  
     loadSavedMovies();
   }, [item.id]);
+  
 
   
   const handleInvite = () => {
@@ -230,7 +223,7 @@ export default function MovieScreen() {
 
         
 
-        <View className="space-y-3 p-4">
+        <View className="space-y-3 p-4 ">
           <Text className="text-black text-left text-2xl font-bold tracking-widest">
             {movie?.title}
           </Text>

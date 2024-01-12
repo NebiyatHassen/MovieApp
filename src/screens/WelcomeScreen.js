@@ -9,7 +9,7 @@ export default function WelcomeScreen() {
   return (
     <View className="flex-1 justify-end items-center space-y-10 relative">
       <Image
-        source={require("../../assets/images/welcome.jpg")}
+        source={require("../../assets/images/movieapp.jpg")}
         style={{
           position: "absolute",
           width: "100%",
@@ -22,8 +22,8 @@ export default function WelcomeScreen() {
 
 
       <View className="flex items-center justify-center py-28 max-w-[80%]">
-        <View className="bg-red-900 p-4 rounded-3xl">
-          <Text className="text-white text-4xl font-extrabold tracking-widest my-4">
+        <View className=" bg-[#F8FAE5] p-4 rounded-3xl">
+          <Text className="text-black text-4xl font-extrabold tracking-widest my-4">
          CG
           </Text>
         </View>
@@ -38,10 +38,10 @@ export default function WelcomeScreen() {
 
       <View className="my-4 mb-36">
         <TouchableOpacity
-          className="px-12 py-3 rounded-lg bg-red-900"
+          className="px-12 py-3 rounded-lg bg-[#F8FAE5]"
           onPress={() => navigation.navigate("HomeTab")}
         >
-          <Text className="text-white text-lg font-medium">Explore</Text>
+          <Text className="text-black text-lg font-bold">Explore</Text>
         </TouchableOpacity>
       </View>
     </View>

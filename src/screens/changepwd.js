@@ -54,7 +54,7 @@ const ChangePasswordScreen = () => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor:'#EAECCC'
+      backgroundColor:'#333'
     },
     title: {
       fontSize: 24,
@@ -71,7 +71,7 @@ const ChangePasswordScreen = () => {
       borderRadius: 5,
     },
     button: {
-      backgroundColor: '#607274',
+      backgroundColor: '#092635',
       padding: 10,
       borderRadius: 5,
     },

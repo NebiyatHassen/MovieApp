@@ -9,7 +9,6 @@ import {
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { image500 } from "../../utils/moviesapi";
-import { Linking } from 'react-native';
 
 
 const { width, height } = Dimensions.get("window");
@@ -50,12 +49,13 @@ export default function PopularMovie({ title, data }) {
   return (
     <View className="space-y-4 mb-4">
       <View className="mx-4 flex-row justify-between items-center">
-      {title === "Similar Movies" ? (
-  <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>{title}</Text>
-) : (
+      {title === "Popular" ? (
   <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>{title}</Text>
+) : (
+  <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>{title}</Text>
 )}
-     </View>
+
+ </View>
 
       <FlatList
         horizontal

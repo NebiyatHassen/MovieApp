@@ -33,7 +33,7 @@ export default function UpcomingMovie({ title, data }) {
             }}
           />
 
-          <Text className=" text-neutral-300 ml-1 text-lg font-bold">
+          <Text className=" text-white ml-1 text-sm">
             {item.title.length > 12
               ? item.title.slice(0, 12) + "..."
               : item.title}

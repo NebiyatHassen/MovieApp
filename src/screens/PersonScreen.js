@@ -51,7 +51,7 @@ export default function PersonScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-neutral-800 relative px-2 py-26"
+      className="flex-1 bg-white relative px-2 py-26"
       contentContainerStyle={{
         paddingBottom: 20,
       }}
@@ -62,7 +62,7 @@ export default function PersonScreen() {
       <View className="flex-row justify-between absolute right-0 top-o mx-4 z-10 my-3">
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          className="rounded-xl p-2 bg-[#607274]"
+          className="rounded-xl p-2 bg-[#092635]"
         >
           <XMarkIcon size="28" strokeWidth={2.5} color="white" />
         </TouchableOpacity>
@@ -89,26 +89,26 @@ export default function PersonScreen() {
             </View>
 
             <View className="mt-6 w-1/2 space-y-3">
-              <Text className="text-2xl text-whit font-bold text-left text-white">
+              <Text className="text-2xl text-whit font-bold text-left text-black">
                 {person?.name}
               </Text>
 
-              <Text className="text-white font-bold text-base text-left p-1 w-1/2 bg-orange-400">
+              <Text className="text-black font-bold text-base text-left p-1 w-1/2 bg-orange-400">
                 {person.popularity?.toFixed(2)} %
               </Text>
 
-              <Text className="text-white font-bold text-base text-left">
+              <Text className="text-black font-bold text-base text-left">
                 {person?.place_of_birth}
               </Text>
 
-              <Text className="text-white font-bold text-base text-left">
+              <Text className="text-black font-bold text-base text-left">
                 {person?.birthday}
               </Text>
             </View>
           </View>
           <View className="my-6 mx-4 space-y-2">
-            <Text className="text-white text-lg font-bold">Biography</Text>
-            <Text className="text-neutral-100 tracking-wide leading-6">
+            <Text className="text-black text-lg font-bold">Biography</Text>
+            <Text className="text-black tracking-wide leading-6">
               {person?.biography ? person.biography : "N / A"}
             </Text>
           </View>

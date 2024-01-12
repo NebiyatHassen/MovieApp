@@ -85,7 +85,7 @@ export default function Welcome(){
                     />
                 </View>
 
-                {/* content  */}
+             
 
                 <View style={{
                     paddingHorizontal: 22,

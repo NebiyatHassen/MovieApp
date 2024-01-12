@@ -37,18 +37,19 @@ const Login = ({ navigation }) => {
    
       navigation.navigate("Welcome"); 
     } catch (error) {
-    if (error.code === 'auth/user-not-found') {
-      
-      Alert.alert('Login Error', 'User not found');
-    } 
-    else if(error.code ==='auth/wrong-password'){
-Alert.alert('Login Error','Password is Incorrect')
-    }
-    else {
-      
-    console.error('Error logging in:', error.message);
-      
-    }
+   
+     const errorCode = error.code;
+     const errorMessage = error.message;
+ 
+     if (errorCode === 'auth/wrong-password') {
+       alert('Invalid password');
+     } else if (errorCode === 'auth/invalid-email') {
+       alert('Invalid email address');
+     } else {
+       alert(errorMessage);
+     }
+ 
+     console.error(error);
     }
   };
   const handleresetpassword = async () => { 

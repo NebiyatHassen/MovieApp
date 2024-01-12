@@ -52,8 +52,9 @@ const Signup = ({ navigation }) => {
                   uid: user.uid,
                   email: email,
                   mobile: mobile,
-                  createdAt: serverTimestamp(),
-                });
+                  createdAt: serverTimestamp()
+                
+                 });
           
                 setEmail('');
                 setPassword('');

@@ -94,7 +94,7 @@ export default function HomeScreen() {
   
 
   return (
-    <View className="flex-1 bg-black">
+    <View className="flex-1 bg-[#333]">
       {/* <Image
         source={require("../../assets/images/Blackbg.jpg")}
         style={{

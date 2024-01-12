@@ -12,36 +12,47 @@ import React, { useCallback, useState } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { image500 } from "../../utils/moviesapi";
-
+import { getAuth} from 'firebase/auth';
 const { width, height } = Dimensions.get("window");
 
 export default function SavedScreen() {
   const navigation = useNavigation();
 
   const [savedMovies, setSavedMovies] = useState([]);
-
   useFocusEffect(
     useCallback(() => {
-      
       const loadSavedMovies = async () => {
         try {
-          const savedMovies = await AsyncStorage.getItem("savedMovies");
-          const savedMoviesArray = savedMovies ? JSON.parse(savedMovies) : [];
-          setSavedMovies(savedMoviesArray);
-          console.log("Pull saved movie from AsyncStorage");
+          const auth = getAuth();
+          const user = auth.currentUser;
+  
+          if (user) {
+            const savedMoviesKey = `savedMovies_${user.uid}`;
+            const savedMovies = await AsyncStorage.getItem(savedMoviesKey);
+            const savedMoviesArray = savedMovies ? JSON.parse(savedMovies) : [];
+            setSavedMovies(savedMoviesArray);
+            console.log("Pull saved movie from AsyncStorage");
+          }
         } catch (error) {
           console.log(error);
         }
       };
+  
       loadSavedMovies();
     }, [navigation])
   );
-
+  
   const clearSavedMovies = async () => {
     try {
-      await AsyncStorage.removeItem("savedMovies");
-      setSavedMovies([]);
-      console.log("Clear all saved movies");
+      const auth = getAuth();
+      const user = auth.currentUser;
+  
+      if (user) {
+        const savedMoviesKey = `savedMovies_${user.uid}`;
+        await AsyncStorage.removeItem(savedMoviesKey);
+        setSavedMovies([]);
+        console.log("Clear all saved movies");
+      }
     } catch (error) {
       console.log("Error clearing saved movies", error);
     }
@@ -49,16 +60,8 @@ export default function SavedScreen() {
 
   return (
     <ScrollView>
-      <View className=" relative flex-1 bg-black" >
-        {/* <ImageBackground
-          source={require("../../assets/images/homescreen.png")}
-          style={{
-            flex: 1,
-            width: "100%",
-            height: "100%",
-          }}
-          resizeMode="cover"
-        > */}
+      <View className=" relative flex-1 bg-[#333]" >
+       
           <View className="mt-12 p-4">
             <View className="flex-row justify-between items-center">
               <Text className="font-bold text-xl text-white ">
@@ -66,9 +69,9 @@ export default function SavedScreen() {
               </Text>
               <TouchableOpacity
                 onPress={clearSavedMovies}
-                className="bg-[#092635] py-2 px-4 rounded-lg"
+                className="bg-[#092635] py-2 px-4 rounded-sm"
               >
-                <Text className="font-bold text-lg text-white">Clear</Text>
+                <Text className="font-bold text-sm text-white">Clear</Text>
               </TouchableOpacity>
             </View>
 
@@ -89,7 +92,7 @@ export default function SavedScreen() {
                         height: height * 0.25,
                       }}
                     />
-                    <Text className="text-gray-300 font-bold text-lg ml-1">
+                    <Text className="text-white font-bold text-sm ml-1">
                       {movie.title.length > 15
                         ? movie.title.slice(0, 15) + "..."
                         : movie.title}
@@ -99,7 +102,7 @@ export default function SavedScreen() {
               ))}
             </View>
           </View>
-        {/* </ImageBackground> */}
+     
       </View>
     </ScrollView>
   );

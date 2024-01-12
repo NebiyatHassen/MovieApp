@@ -98,13 +98,19 @@ const user = auth.currentUser;
         );
         const data = await response.json();
         setMovieDetails(data);
+  
+      
         const videoResponse = await fetch(
           `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${movieapikey}`
         );
         const videoData = await videoResponse.json();
-       
-        const videoKey = videoData.results[0]?.key;
+        
   
+      
+        const videoKey = videoData.results[0]?.key;
+       
+  
+       
         setVideoSource(`https://www.youtube.com/watch?v=${videoKey}`);
       } catch (error) {
         console.error("Error fetching movie details:", error);
@@ -144,7 +150,7 @@ const user = auth.currentUser;
   <>
     <Video
       source={{
-        uri: videoSource,
+        uri: 'https://res.cloudinary.com/ds3wsc8as/video/upload/v1704278691/THE_WOMAN_KING_Official_Trailer_HD_kjdvrk.mp4',
       }}
       rate={1.0}
       volume={1.0}

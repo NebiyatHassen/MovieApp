@@ -74,7 +74,7 @@ export default function AppNavigation() {
           },
           tabBarActiveTintColor: "white",
           tabBarStyle: {
-            backgroundColor: "#1F1D2B",
+            backgroundColor: "#333",
             borderTopWidth: 0,
             paddingBottom: 10,
           },

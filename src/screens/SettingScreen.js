@@ -1,11 +1,11 @@
 import React, { useState,useEffect } from 'react';
 import { View, Text, Switch, StyleSheet, TouchableOpacity,Image,Button} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from @expo/vector-icons
-import { getAuth, signOut,sendPasswordResetEmail,updateProfile} from 'firebase/auth';
+import { getAuth, signOut} from 'firebase/auth';
 import Modal from 'react-native-modal';
 import * as ImagePicker from 'expo-image-picker';
 
-import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, updateDoc,setDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingScreen = ({navigation}) => {
@@ -18,26 +18,24 @@ const SettingScreen = ({navigation}) => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
   const [image, setImage] = useState(null);
- 
-  useEffect(() => {
+  const loadSavedData = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const userId = user.uid;
+      const savedImage = await AsyncStorage.getItem(`profileImage_${userId}`);
   
-    const loadSavedData = async () => {
-      try {
-        const savedImage = await AsyncStorage.getItem('profileImage');
-
-        if (savedImage) {
-          setImage(savedImage);
-        }
-
-  
-      } catch (error) {
-        console.error('Error loading saved data:', error.message);
+      if (savedImage) {
+        setImage(savedImage);
       }
-    };
-
+    } catch (error) {
+      console.error('Error loading saved data:', error.message);
+    }
+  };
+   useEffect(() => {
     loadSavedData();
   }, []);
-
+  
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -45,30 +43,45 @@ const SettingScreen = ({navigation}) => {
       aspect: [4, 3],
       quality: 1,
     });
-  
     if (!result.canceled) {
-   
       const selectedAsset = result.assets[0];
+      const imageUrl = selectedAsset.uri;
   
-      
-      setImage(selectedAsset.uri);
-      await AsyncStorage.setItem('profileImage', selectedAsset.uri);
+      const auth = getAuth();
+      const user = auth.currentUser;
+  
+      if (!user) {
+        console.error('User is not authenticated');
+        return;
+      }
+  
+      const userId = auth.currentUser.uid;
+      await updateProfilePictureInFirestore(userId, imageUrl);
+  
+      setImage(imageUrl);
+      await AsyncStorage.setItem(`profileImage_${userId}`, imageUrl);
     }
   };
   
-
-  const handleUpdateProfile = async () => {
+  const updateProfilePictureInFirestore = async (userId, imageUrl) => {
+    const firestore = getFirestore();
+  
     try {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (image) {
-        await updateProfile(user, { photoURL: image });
-      }
-      alert('Profile updated successfully!');
+      
+      const userRef = doc(firestore, 'users', userId);
+  
+      const userDoc = await getDoc(userRef);
+  
+  await setDoc(userRef, { profilePicture: imageUrl });
+  console.log('Profile picture updated successfully.');
+      
     } catch (error) {
-      console.error('Error updating profile:', error.message);
-      alert('An error occurred while updating the profile. Please try again.');
-    }}
+      console.error('Error updating profile picture in Firestore:', error);
+    }
+  };
+  
+  
+  
 
   const handleNotificationToggle = () => {
     setNotificationSwitch(!notificationSwitch);
@@ -105,25 +118,22 @@ const handleabout =()=>{
 
   };
   return (
-    <View style={[styles.container, { backgroundColor: theme === 'light' ? '#fff' : '#000' }]}>
+    <View style={[styles.container, { backgroundColor: theme === 'light' ? '#fff' : '#333' }]}>
     
     <Text style ={styles.head}>SETTING</Text>
 
     <View style={styles.containerr}>
-      <TouchableOpacity onPress={pickImage} style={styles.imagePickerContainer}>
-        {image ? (
-          <Image source={{ uri: image }} style={styles.profileImage} />
-        ) : (
-          <Image source={require('../../assets/images/avatar.png')} style={styles.profileImage} />
-        )}
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <Ionicons name="pencil-outline" size={15} color="#3498db" />
-      <Text style={{ marginLeft: 8 }}>Edit</Text>
-    </View>
-      
-
-      </TouchableOpacity>
-
+    <TouchableOpacity onPress={pickImage} style={styles.imagePickerContainer}>
+  {image ? (
+    <Image source={{ uri: image }} style={styles.profileImage} />
+  ) : (
+    <Image source={require('../../assets/images/avatar.png')} style={styles.profileImage} />
+  )}
+  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <Ionicons name="pencil-outline" size={15} color="#3498db" />
+    <Text style={{ marginLeft: 8 }}>Edit</Text>
+  </View>
+</TouchableOpacity>
     </View>
       <Text style={styles.header}>PREFERENCES</Text>
 
@@ -286,7 +296,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
-    backgroundColor: '#d3d3d3',
+    backgroundColor: '#fff',
   paddingBottom: 10,
   shadowOffset: {
     width: 0,
@@ -304,8 +314,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
-    backgroundColor: '#d3d3d3',
+    backgroundColor: '#fff',
   paddingBottom: 10,
+  shadowOpacity: 0.5,
+  shadowRadius: 3.84,
+  elevation: 5,
   },
   logoutButtonText: {
     color: 'black',
@@ -330,7 +343,7 @@ const styles = StyleSheet.create({
   },
 
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor:'white',
     padding: 20,
     borderRadius: 10,
     elevation: 5,

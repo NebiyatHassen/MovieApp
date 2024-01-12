@@ -52,16 +52,14 @@ export default function TopRatedMovies({ data, title, genre }) {
           />
 
           <View className="absolute bottom-3 left-3">
-            <Text className="text-neutral-300 ml-1 text-lg font-bold">
+            <Text className="text-white ml-1 text-lg font-bold">
               {item.title.length > 20
                 ? item.title.slice(0, 20) + "..."
                 : item.title}
             </Text>
 
             <View className="flex-row">
-              <Text className="text-neutral-300 ml-1 text-sm font-medium">
-                {item.vote_average} *
-              </Text>
+              
               <Text className="text-neutral-300 ml-1 text-sm font-medium">
                 {itemGenre?.name}
               </Text>
