@@ -68,10 +68,10 @@ export default function MovieScreen() {
   };
 
 
-  const formatPopularity = (popularity) => {
-    const percentage = (popularity / 1000) * 170;
-    return `${Math.round(percentage)} %`;
-  };
+  // const formatPopularity = (popularity) => {
+  //   const percentage = (popularity / 1000) * 170;
+  //   return `${Math.round(percentage)} %`;
+  // };
   const formatRuntime = (runtime) => {
     const hours = Math.floor(runtime / 60);
     const minutes = runtime % 60;
@@ -248,8 +248,8 @@ export default function MovieScreen() {
           {movie?.id ? (
             <View className=" bg-[white] p-2 w-3/4 rounded-lg]">
               <Text className="text-black font-semibold text-base text-left">
-                {formatPopularity(movie?.popularity)}
-                {" * "}
+                {/* {formatPopularity(movie?.popularity)} */}
+                {/* {" * "} */}
                 {formatRuntime(movie?.runtime)} {}{" "}
                 {movie?.release_date?.split("-")[0] || "N/A"}
               </Text>

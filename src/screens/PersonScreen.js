@@ -93,9 +93,9 @@ export default function PersonScreen() {
                 {person?.name}
               </Text>
 
-              <Text className="text-black font-bold text-base text-left p-1 w-1/2 bg-orange-400">
+              {/* <Text className="text-black font-bold text-base text-left p-1 w-1/2 bg-orange-400">
                 {person.popularity?.toFixed(2)} %
-              </Text>
+              </Text> */}
 
               <Text className="text-black font-bold text-base text-left">
                 {person?.place_of_birth}

@@ -110,15 +110,15 @@ export default function HomeScreen() {
         
 
         <View className="flex-row justify-between items-center mx-4 mg-4">
-          <View className="border-2 border-white rounded-full overflow-hidden">
-            <Image
+          <View className=" border-black rounded-full overflow-hidden">
+            {/* <Image
               source={require("../../assets/images/avatar.png")}
               style={{
                 width: 45,
                 height: 45,
               }}
               resizeMode="cover"
-            />
+            /> */}
           </View>
 
         

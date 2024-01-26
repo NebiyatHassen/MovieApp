@@ -37,7 +37,7 @@ export default function TopRatedMovies({ data, title, genre }) {
             }}
           />
 
-          <LinearGradient
+          {/* <LinearGradient
             colors={["transparent", "rgba(0,0,0,0.9)"]}
             style={{
               position: "absolute",
@@ -48,8 +48,8 @@ export default function TopRatedMovies({ data, title, genre }) {
               borderBottomRightRadius: 24,
             }}
             start={{ x: 0.5, y: 0 }}
-            end={{ x: 0.5, y: 1 }}
-          />
+          end={{ x: 0.5, y: 1 }}
+          /> */}
 
           <View className="absolute bottom-3 left-3">
             <Text className="text-white ml-1 text-lg font-bold">

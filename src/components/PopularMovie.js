@@ -36,7 +36,7 @@ export default function PopularMovie({ title, data }) {
             }}
           />
 
-          <Text className=" text-black ml-1 text-sm">
+          <Text className=" text-white ml-1 text-sm">
             {item.title.length > 12
               ? item.title.slice(0, 12) + "..."
               : item.title}

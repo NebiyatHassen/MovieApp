@@ -20,7 +20,7 @@ const ChangePasswordScreen = () => {
         setCurrentPassword('');
         setNewPassword('');
       } catch (error) {
-        console.error('Error changing password:', error.message);
+        //console.error('Error changing password:', error.message);
         Alert.alert('Error', 'Failed to change password. Please check your current password and try again.');
       }
     };

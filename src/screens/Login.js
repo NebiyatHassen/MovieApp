@@ -58,7 +58,7 @@ const Login = ({ navigation }) => {
       await sendPasswordResetEmail(auth, email); 
       alert('Password reset email sent. Check your inbox.'); 
     } catch (error) { 
-      console.log(error); 
+      //console.log(error); 
       alert('Error sending password reset email.'); 
     } 
   };
@@ -174,7 +174,7 @@ const Login = ({ navigation }) => {
             }}
           />
           
-          <Text style={{ fontSize: 14 }}>Or Login with</Text>
+       
           <View
             style={{
               flex: 1,
@@ -186,65 +186,7 @@ const Login = ({ navigation }) => {
         </View>
 
 
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-        }}>
-        
-        
        
-          <TouchableOpacity
-            onPress={() => console.log("Pressed")}
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              height: 52,
-              borderWidth: 1,
-              borderColor: COLORS.grey,
-              marginRight: 4,
-              borderRadius: 10,
-            }}
-          >
-            <Image
-              source={require('../../assets/images/facebook.png')}
-              style={{
-                height: 36,
-                width: 36,
-                marginRight: 8,
-              }}
-              resizeMode='contain'
-            />
-            <Text>Facebook</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => console.log("Pressed")}
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              height: 52,
-              borderWidth: 1,
-              borderColor: COLORS.grey,
-              marginRight: 4,
-              borderRadius: 10,
-            }}
-          >
-            <Image
-              source={require('../../assets/images/google.png')}
-              style={{
-                height: 36,
-                width: 36,
-                marginRight: 8,
-              }}
-              resizeMode='contain'
-            />
-            <Text>Google</Text>
-          </TouchableOpacity>
-        </View>
 
         <View style={{
           flexDirection: 'row',
