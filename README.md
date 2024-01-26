@@ -1,9 +1,5 @@
-## Getting Started
+## Installation Command
+npm install
 
-### Set up Installation 
-
-- npm install
-
-### To start  project 
-
-- npm start
+## To start  project 
+ npm start
